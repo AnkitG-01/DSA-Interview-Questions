@@ -22,15 +22,13 @@ Explanation: From the top-left corner, there are a total of 3 ways to reach the 
 
 '''
 class Solution:
-    def uniquePaths(self, m, n):
-        #Basically we are calculating the value of NCr
-        N=n+m-2 #total number of steps need to be taken
-        r=min(m-1,n-1) #total number of rightward or downward steps need to taken, whichever is minimum
-        res=1
-        #calculating the NCr value in variable res in this loop
-        for i in range(1,r+1):
-            res=res*(N-r+i)/i
-
-        return int(res)
+    def uniquePaths(self, m, n,memo={}):
+        if m==1 or n==1:
+            return 1
+        if (m,n) in memo:
+            return memo[(m,n)]
+        memo[(m,n)]=self.uniquePaths(m-1,n)+self.uniquePaths(m,n-1)
+        memo[(n,m)]=memo[(m,n)]
+        return memo[(m,n)]
 s=Solution()
 print(s.uniquePaths(3,7))
