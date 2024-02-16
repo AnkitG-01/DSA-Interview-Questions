@@ -21,24 +21,23 @@ Explanation: There is no subset with sum 30.
 '''
 class Solution:
     
-    def isSubsetSum (self, N, arr, sum):
-        dp=[[-1 for i in range(sum+1)] for j in range(N+1)]
-        def helper(N,arr,sum):
-            if sum==0:
-                return 1
-            if N<=0:
-                return 0
-            if dp[N][sum] != -1:
-                return dp[N][sum]
-            if arr[N-1]>sum:
-                dp[N-1][sum]=helper(N-1,arr,sum)
-                return dp[N-1][sum]
-            else:
-                dp[N-1][sum]=helper(N-1,arr,sum)
-                return dp[N-1][sum] or helper(N-1,arr,sum-arr[N-1])
-        return helper(N,arr,sum)    
+    def isSubsetSum(self,N,arr,sum,memo={}):
+        if sum==0:
+            return True
+        if N<=0:
+            return False
+        if (N,sum) in memo:
+            return memo[(N,sum)]
+        if arr[N-1]>sum:
+            memo[(N-1,sum)] = self.isSubsetSum(N-1,arr,sum)
+            return memo[(N-1,sum)]
+        else:
+            memo[(N-1,sum)] = self.isSubsetSum(N-1,arr,sum)
+            memo[(N-1,sum-arr[N-1])] = self.isSubsetSum(N-1,arr,sum-arr[N-1])
+            return memo[(N-1,sum)] or memo[(N-1,sum-arr[N-1])]
+           
         
 s=Solution()
-l=[3,4,12,32,5]
-target=6
+l=list(map(int,input().split()))
+target=4877
 print(s.isSubsetSum(len(l),l,target))
